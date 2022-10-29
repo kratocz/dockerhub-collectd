@@ -12,8 +12,6 @@ name: Publish Docker image
 on:
   schedule:
     - cron: '38 21 * * *'
-  release:
-    types: [published]
   push:
     branches: [ "main" ]
     # Publish semver tags as releases.
@@ -45,5 +43,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
           labels: ${{ steps.meta.outputs.labels }}
