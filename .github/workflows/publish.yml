@@ -23,7 +23,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php_version: [7.2, 8.1]
+        php_version: [7.2, 7.4, 8.1]
+        web_server: ["", "-apache"]
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -42,15 +43,14 @@ jobs:
         with:
           images: krato/php
           tags: |
-            type=semver,pattern=${{ matrix.php_version }}-apache-{{major}}.{{minor}}
-            type=semver,pattern=${{ matrix.php_version }}-apache-{{major}}
-            type=semver,pattern=${{ matrix.php_version }}-apache
+            type=semver,pattern=${{ matrix.php_version }}${{ matrix.web_server }}-{{major}}
+            type=semver,pattern=${{ matrix.php_version }}${{ matrix.web_server }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
           push: ${{ github.ref_type == 'tag' }}
-          build-args: "PHP_VERSION=${{ matrix.php_version }}"
+          build-args: "PHP_TAG=${{ matrix.php_version }}${{ matrix.web_server }}"
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
