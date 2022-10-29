@@ -21,6 +21,7 @@ jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
     strategy:
+      fail-fast: false
       matrix:
         php_version: [7.2, 8.1]
     runs-on: ubuntu-latest
