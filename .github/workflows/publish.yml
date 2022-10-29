@@ -48,6 +48,6 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
-          push: ${{ github.ref_name == 'tag' }}
+          push: ${{ github.ref_type == 'tag' }}
           build-args: [PHP_VERSION=${{ $matrix.php_version }}]
           labels: ${{ steps.meta.outputs.labels }}
