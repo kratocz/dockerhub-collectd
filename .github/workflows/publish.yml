@@ -49,6 +49,6 @@ jobs:
         with:
           context: .
           push: ${{ github.ref_type == 'tag' }}
-          build-args: ["PHP_VERSION=matrix.php_version"]
+          build-args: ["PHP_VERSION=${{ matrix.php_version }}"]
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
