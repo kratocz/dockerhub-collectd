@@ -43,8 +43,8 @@ jobs:
         with:
           images: krato/php
           tags: |
-            type=semver,pattern=${{ matrix.php_version }}${{ matrix.web_server }}-{{major}}
             type=semver,pattern=${{ matrix.php_version }}${{ matrix.web_server }}
+            type=semver,pattern=${{ matrix.php_version }}${{ matrix.web_server }}-{{major}}
           # type=semver,pattern=${{ matrix.php_version }}${{ matrix.web_server }}-{{major}}{{minor}}
 
       - name: Build and push Docker image
@@ -52,6 +52,6 @@ jobs:
         with:
           context: .
           push: ${{ github.ref_type == 'tag' }}
-          build-args: "PHP_TAG=${{ matrix.php_version }}${{ matrix.web_server }}"
+          build-args: "PHP_IMAGE_TAG=${{ matrix.php_version }}${{ matrix.web_server }}"
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
