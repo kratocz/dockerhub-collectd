@@ -1,9 +1,18 @@
 # General info
 
-PHP with a few favorite extensions and packages like pdo-mysql, mariadb-client, ...
+Official PHP image extended with a few favorite extensions and packages, see this Dockerfile for more info:
 
-See Dockerfile for more info.
+https://github.com/kratocz/dockerhub-php/blob/main/Dockerfile
 
-Versions:
+# Tags
 
-* 1.0 ... based on php:7.2-apache
+- 7.2
+- 7.2-apache
+- 7.4
+- 7.4-apache
+- 8.1
+- 8.1-apache
+
+# Usage
+
+See the base image documentation: https://hub.docker.com/_/php
