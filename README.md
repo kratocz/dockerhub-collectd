@@ -12,7 +12,8 @@ https://github.com/kratocz/dockerhub-php/blob/main/Dockerfile
 - 7.4-apache
 - 8.1
 - 8.1-apache
+- *-1, *-2, *-3, ... (e.g. 8.1-apache-1) has fixed set of additional packages (recommended).
 
-# Usage
+# Installation and usage
 
 See the base image documentation: https://hub.docker.com/_/php
