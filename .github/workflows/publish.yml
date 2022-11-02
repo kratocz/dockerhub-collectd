@@ -39,8 +39,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: 1.2.Dockerfile
           push: true
+          target: v1_2
           build-args: "PHP_IMAGE_TAG=${{ matrix.php_version }}${{ matrix.web_server }}"
           tags: krato/php:${{ matrix.php_version }}${{ matrix.web_server }}-1.2
 
@@ -48,7 +48,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: 1.3.Dockerfile
           push: true
+          target: v1_3
           build-args: "PHP_IMAGE_TAG=${{ matrix.php_version }}${{ matrix.web_server }}"
           tags: krato/php:${{ matrix.php_version }}${{ matrix.web_server }}-1.3,krato/php:${{ matrix.php_version }}${{ matrix.web_server }}-1,krato/php:${{ matrix.php_version }}${{ matrix.web_server }}
