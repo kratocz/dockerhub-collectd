@@ -17,3 +17,4 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --w
 RUN docker-php-ext-install -j$(nproc) gd
 RUN ( test "5." = "`echo "${PHP_IMAGE_TAG}" | cut -c1-2`" ) || pecl install xdebug
 
+FROM v1_3 AS latest
