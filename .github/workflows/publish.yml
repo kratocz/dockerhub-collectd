@@ -66,10 +66,10 @@ jobs:
 
       - name: Build and push Docker image latest
         uses: docker/build-push-action@v3
-        if: ${{ matrix.php_version == env.latest_php_version }}
+        if: ${{ matrix.php_version == env.latest_php_version && matrix.web_server == '' }}
         with:
           context: .
           push: ${{ github.ref_name == 'main' }}
           build-args: PHP_IMAGE_TAG=${{ matrix.php_version }}${{ matrix.web_server }}
-          tags: ${{ secrets.DOCKER_USERNAME }}/php:${{ matrix.web_server }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/php:latest
           target: latest
