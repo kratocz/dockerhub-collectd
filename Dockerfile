@@ -15,6 +15,5 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --w
     || docker-php-ext-configure gd --with-freetype --with-jpeg --with-png \
     || docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
-RUN echo "PHP_IMAGE_TAG: ${PHP_IMAGE_TAG} - first 2 chars: `echo "${PHP_IMAGE_TAG}" | cut -c1-2`"
 RUN ( test "5." = "`echo "${PHP_IMAGE_TAG}" | cut -c1-2`" ) || pecl install xdebug
 
