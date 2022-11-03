@@ -1,5 +1,4 @@
 ARG PHP_IMAGE_TAG="8.1"
-ARG ENVIRONMENT=""
 FROM php:${PHP_IMAGE_TAG} AS v1_2
 
 RUN apt-get update && apt-get install -y mariadb-client openssh-client zlib1g-dev zip libpng-dev libzip-dev
@@ -15,5 +14,5 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --w
     || docker-php-ext-configure gd --with-freetype --with-jpeg --with-png \
     || docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
-RUN test "5.6" = ${PHP_IMAGE_TAG} || pecl install xdebug
+RUN test "5." = "${PHP_IMAGE_TAG:0:2}" || pecl install xdebug
 
