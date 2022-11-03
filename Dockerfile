@@ -7,10 +7,6 @@ RUN docker-php-ext-install -j$(nproc) pdo_mysql zip
 
 RUN test ! -f /usr/sbin/apache2 || a2enmod rewrite
 
-FROM v1_2 AS v1_2-dev
-
-RUN docker-php-ext-enable xdebug
-
 FROM v1_2 AS v1_3
 
 RUN apt-get install -y sendmail libjpeg-dev libjpeg62-turbo-dev libfreetype6-dev
@@ -20,8 +16,4 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --w
     || docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
 RUN pecl install xdebug
-
-FROM v1_3 AS v1_3-dev
-
-RUN docker-php-ext-enable xdebug
 
