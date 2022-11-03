@@ -6,6 +6,7 @@ RUN docker-php-ext-install -j$(nproc) pdo_mysql zip
 
 RUN test ! -f /usr/sbin/apache2 || a2enmod rewrite
 
+ARG PHP_IMAGE_TAG="8.1"
 FROM v1_2 AS v1_3
 
 RUN apt-get install -y sendmail libjpeg-dev libjpeg62-turbo-dev libfreetype6-dev
