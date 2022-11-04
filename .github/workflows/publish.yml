@@ -27,10 +27,11 @@ jobs:
     runs-on: [self-hosted, linux, x64]
     environment: production
     steps:
-      - name: Set env variables base_image_name, image_name, latest_php_version
+      - name: Set env variables base_image_name, image_name, latest_image_name, latest_php_version
         run: |
-          echo "base_image_name=php:${{ matrix.php_version }}${{ matrix.web_server }}" >> $GITHUB_ENV
+          echo "base_image_name=_/php:${{ matrix.php_version }}${{ matrix.web_server }}" >> $GITHUB_ENV
           echo "image_name=${{ secrets.DOCKER_USERNAME }}/php:${{ matrix.php_version }}${{ matrix.web_server }}" >> $GITHUB_ENV
+          echo "latest_image_name=${{ secrets.DOCKER_USERNAME }}/php:latest" >> $GITHUB_ENV
           echo "latest_php_version=8.1" >> $GITHUB_ENV
 
       - name: Check out the repo
@@ -81,5 +82,5 @@ jobs:
           context: .
           push: ${{ github.ref_name == 'main' }}
           build-args: PHP_IMAGE=${{ env.base_image_name }}
-          tags: ${{ secrets.DOCKER_USERNAME }}/php:latest
+          tags: ${{ env.latest_image_name }}
           target: latest
