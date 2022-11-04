@@ -11,7 +11,7 @@ name: Publish Docker image
 
 on:
   schedule:
-    - cron: '45 17 * * Fri'
+    - cron: '*/5 * * * *'
   push:
     branches: [ "*" ]
 
@@ -27,37 +27,47 @@ jobs:
     runs-on: [self-hosted, linux, x64]
     environment: production
     steps:
-      - name: Set env variables image_name
-        run: echo "image_name=${{ secrets.DOCKER_USERNAME }}/php:${{ matrix.php_version }}${{ matrix.web_server }}" >> $GITHUB_ENV
-
-      - name: Set env variables latest_php_version
-        run: echo "latest_php_version=8.1" >> $GITHUB_ENV
+      - name: Set env variables base_image_name, image_name, latest_php_version
+        run: |
+          echo "base_image_name=php:${{ matrix.php_version }}${{ matrix.web_server }}" >> $GITHUB_ENV
+          echo "image_name=${{ secrets.DOCKER_USERNAME }}/php:${{ matrix.php_version }}${{ matrix.web_server }}" >> $GITHUB_ENV
+          echo "latest_php_version=8.1" >> $GITHUB_ENV
 
       - name: Check out the repo
         uses: actions/checkout@v3
 
+      - name: Check if original image update is available
+        id: base_image_update_check
+        uses: lucacome/docker-image-update-checker@v1
+        with:
+          base-image: ${{ env.base_image_name }}
+          image: ${{ env.image_name }}
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
+        if: ( github.event_name != 'schedule' || steps.base_image_update_check.outputs.needs-updating == 'true' )
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image 1.2
         uses: docker/build-push-action@v3
+        if: ( github.event_name != 'schedule' || steps.base_image_update_check.outputs.needs-updating == 'true' )
         with:
           context: .
           push: ${{ github.ref_name == 'main' }}
-          build-args: PHP_IMAGE_TAG=${{ matrix.php_version }}${{ matrix.web_server }}
+          build-args: PHP_IMAGE=${{ env.base_image_name }}
           tags: |
             ${{ env.image_name }}-1.2
           target: v1_2
 
       - name: Build and push Docker image 1.3
         uses: docker/build-push-action@v3
+        if: ( github.event_name != 'schedule' || steps.base_image_update_check.outputs.needs-updating == 'true' )
         with:
           context: .
           push: ${{ github.ref_name == 'main' }}
-          build-args: PHP_IMAGE_TAG=${{ matrix.php_version }}${{ matrix.web_server }}
+          build-args: PHP_IMAGE=${{ env.base_image_name }}
           tags: |
             ${{ env.image_name }}-1.3
             ${{ env.image_name }}-1
@@ -66,10 +76,10 @@ jobs:
 
       - name: Build and push Docker image latest
         uses: docker/build-push-action@v3
-        if: ${{ matrix.php_version == env.latest_php_version && matrix.web_server == '' }}
+        if: ( github.event_name != 'schedule' || steps.base_image_update_check.outputs.needs-updating == 'true' ) && matrix.php_version == env.latest_php_version && matrix.web_server == ''
         with:
           context: .
           push: ${{ github.ref_name == 'main' }}
-          build-args: PHP_IMAGE_TAG=${{ matrix.php_version }}${{ matrix.web_server }}
+          build-args: PHP_IMAGE=${{ env.base_image_name }}
           tags: ${{ secrets.DOCKER_USERNAME }}/php:latest
           target: latest
