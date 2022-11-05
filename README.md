@@ -24,4 +24,19 @@ https://github.com/kratocz/dockerhub-php/blob/main/Dockerfile
 
 # Installation and usage
 
-TBD.
+Example usage in `docker-compose.yml`:
+
+```
+  collectd:
+    image: krato/collectd
+    ports:
+      - 25826:25826/udp
+    environment:
+      - TZ=Europe/Prague
+    volumes:
+      - ./collectd/rrd:/var/lib/collectd/rrd
+      - ./collectd/csv:/var/lib/collectd/csv
+      - ./collectd/collectd.conf.d:/etc/collectd/collectd.conf.d:ro
+    restart: unless-stopped
+```
+
