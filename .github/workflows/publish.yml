@@ -22,15 +22,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: ['debian:10']
+        include:
+          - os: debian
+            os_tag: 10
     #runs-on: ubuntu-latest
     runs-on: [self-hosted, linux, x64]
     steps:
       - name: Set env variables default_os, base_image_name, image_name, latest_image_name
         run: |
           echo "default_os=debian" >> $GITHUB_ENV
-          echo "base_image_name=library/${{ matrix.os }}" >> $GITHUB_ENV
-          echo "image_name=${{ secrets.DOCKER_USERNAME }}/collectd:${{ matrix.os }}" >> $GITHUB_ENV
+          echo "default_os_tag=10" >> $GITHUB_ENV
+          echo "base_image_name=library/${{ matrix.os }}:${{ matrix.os_tag }}" >> $GITHUB_ENV
+          echo "image_name=${{ secrets.DOCKER_USERNAME }}/collectd:${{ matrix.os }}${{ matrix.os_tag }}" >> $GITHUB_ENV
           echo "latest_image_name=${{ secrets.DOCKER_USERNAME }}/collectd:latest" >> $GITHUB_ENV
 
       - name: Check out the repo
@@ -66,7 +69,7 @@ jobs:
 
       - name: Build and push Docker image latest
         uses: docker/build-push-action@v3
-        if: ( github.event_name != 'schedule' || steps.base_image_update_check.outputs.needs-updating == 'true' ) && matrix.os == env.default_os
+        if: ( github.event_name != 'schedule' || steps.base_image_update_check.outputs.needs-updating == 'true' ) && matrix.os == env.default_os && matrix.os_tag == env.default_os_tag
         with:
           context: .
           push: ${{ github.ref_name == 'main' }}
