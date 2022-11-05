@@ -38,7 +38,6 @@ jobs:
 
       - name: Check if original image update is available
         id: base_image_update_check
-        if: false
         uses: lucacome/docker-image-update-checker@v1
         with:
           base-image: ${{ env.base_image_name }}
