@@ -24,14 +24,14 @@ jobs:
       matrix:
         include:
           - os: debian
-            os_tag: 10
+            os_tag: 11
     #runs-on: ubuntu-latest
     runs-on: [self-hosted, linux, x64]
     steps:
       - name: Set env variables default_os, base_image_name, image_name, latest_image_name
         run: |
           echo "default_os=debian" >> $GITHUB_ENV
-          echo "default_os_tag=10" >> $GITHUB_ENV
+          echo "default_os_tag=11" >> $GITHUB_ENV
           echo "base_image_name=library/${{ matrix.os }}:${{ matrix.os_tag }}" >> $GITHUB_ENV
           echo "image_name=${{ secrets.DOCKER_USERNAME }}/collectd:${{ matrix.os }}${{ matrix.os_tag }}" >> $GITHUB_ENV
           echo "latest_image_name=${{ secrets.DOCKER_USERNAME }}/collectd:latest" >> $GITHUB_ENV
