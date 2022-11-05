@@ -30,7 +30,7 @@ jobs:
         run: |
           echo "default_os=debian" >> $GITHUB_ENV
           echo "base_image_name=library/${{ matrix.os }}" >> $GITHUB_ENV
-          echo "image_name=${{ secrets.DOCKER_USERNAME }}/collectd:${{ matrix.os }} >> $GITHUB_ENV
+          echo "image_name=${{ secrets.DOCKER_USERNAME }}/collectd:${{ matrix.os }}" >> $GITHUB_ENV
           echo "latest_image_name=${{ secrets.DOCKER_USERNAME }}/collectd:latest" >> $GITHUB_ENV
 
       - name: Check out the repo
