@@ -24,8 +24,8 @@ jobs:
         include:
           - os: debian
             os_tag: 11
-    #runs-on: ubuntu-latest
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ubuntu-latest
+    #runs-on: [self-hosted, linux, x64]
     steps:
       - name: Set env variables default_os, base_image_name, image_name, latest_image_name
         run: |
